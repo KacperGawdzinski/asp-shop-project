@@ -19,7 +19,7 @@
       <Association Name="User_Order" Member="Order" ThisKey="id" OtherKey="user_id" Type="Order" />
     </Type>
   </Table>
-  <Table Name="dbo.Processor" Member="Processor">
+  <Table Name="dbo.[Processor]" Member="Processor">
     <Type Name="Processor">
       <Column Name="id" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="name" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
