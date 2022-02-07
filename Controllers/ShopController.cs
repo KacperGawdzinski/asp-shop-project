@@ -31,6 +31,7 @@ namespace project.Controllers {
                 return View(procs);
             }
         }
+        [HttpGet]
         public ActionResult Admin() {
             using (var context = new DatabaseDataContext())
             {
@@ -45,50 +46,34 @@ namespace project.Controllers {
             }   
         }
         [HttpPost]
-        public ActionResult Logged(Models.Processor p)
+        public ActionResult Logged(int id)
         {
             if (Session["Cart"] == null)
             {
-                Session["Cart"] = new List<Models.Order>();
+                Session["Cart"] = new Dictionary<int,int>();
             }
-            Models.Order order = new Models.Order() { price = (float)p.price, products = new string[] { p.name }, quantities = new int[] { 1 }, user_id = 0 /* TODO id zalogowanego*/ };
-            ((List<Models.Order>)Session["Cart"]).Add(order);
+
             using (var context = new DatabaseDataContext())
             {
-                Models.Processor[] procs = context.Processor.Select(x => new Models.Processor
-                {
-                    id = x.id,
-                    name = x.name,
-                    hash = x.hash,
-                    price = (double)x.price
-                }).ToArray();
-                return View(procs);
+                Processor p = (from a in context.Processor where a.id == id select a).Single();
+                Models.Processor processor = new Models.Processor() { price = (float)p.price, hash= p.hash, id=p.id, name = p.name};
+                int v=0;
+                bool try_find = ((Dictionary<int, int>)Session["Cart"]).TryGetValue(id,out v);
+                if (try_find) {
+                    ((Dictionary<int, int>)Session["Cart"])[id]= v + 1;
+                }
+                else {
+                    ((Dictionary<int, int>)Session["Cart"]).Add(id, 1);
+                }
+                return Logged();
             }
         }
-        [HttpDelete]
-        public ActionResult Admin(Models.Processor o)
-        {
-            using (var context = new DatabaseDataContext())
-            {
-                context.Processor.DeleteOnSubmit(new Processor() { id = o.id, name = o.name, hash = o.hash, price=o.price});
-                context.SubmitChanges();
-            }
-            using (var context = new DatabaseDataContext())
-            {
-                Models.Processor[] procs = context.Processor.Select(x => new Models.Processor
-                {
-                    id = x.id,
-                    name = x.name,
-                    hash = x.hash,
-                    price = (double)x.price
-                }).ToArray();
-                return View(procs);
-            }
-        }
-        [HttpPost]
-        public ActionResult Admin(Models.Processor o, int n) // TODO dodawanie elementu funkcja
-        {
-            using (var context = new DatabaseDataContext())
+
+        /*
+                [HttpPost]
+                [ActionName("Delete")]
+                public ActionResult Admin(int id) {
+                    using (var context = new DatabaseDataContext())
             {
                 context.Processor.Append(new Processor() { id = o.id, name = o.name, hash = o.hash, price = o.price });
                 context.SubmitChanges();
@@ -104,6 +89,20 @@ namespace project.Controllers {
                 }).ToArray();
                 return View(procs);
             }
+                    
+           */
+
+        [HttpPost]
+        public ActionResult Admin(int id) // TODO dodawanie elementu funkcja
+        {
+            
+            using (var context = new DatabaseDataContext())
+            {
+                Processor p = (from a in context.Processor where a.id == id select a).Single();
+                context.Processor.DeleteOnSubmit(p);
+                context.SubmitChanges();
+            }
+            return new HttpStatusCodeResult(System.Net.HttpStatusCode.OK);
         }
     }
 }

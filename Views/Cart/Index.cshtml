@@ -1,4 +1,4 @@
-﻿@model IEnumerable<project.Models.Order>
+﻿@model project.Models.Cart
 @{
     ViewBag.Title = "Index";
 }
@@ -6,22 +6,42 @@
 <div>
     <table id="customers">
         <tr>
+            <th>Image</th>
             <th>ID</th>
-            <th>Products</th>
-            <th>User</th>
+            <th>Quantity</th>
             <th>Price</th>
         </tr>
-        @foreach (var item in Model) {
+        @{float fullPrice = 0f;}
+        @{var cart = Model.cart;}
+        @foreach (var item in cart) {
+            string srcString = "/Content/Images/" + @item.Key.hash;
+            float itemsPrice = (float)@item.Key.price * @item.Value;
+            fullPrice += itemsPrice;
             <tr>
-                <td>@item.id.ToString()</td>
-                <td>
-                    @for (int i = 0; i < item.products.Length; i++) {
-                        <p>@item.products[i]: @item.quantities[i].ToString()</p>
-                     }
-                </td>
-                <td>@item.user_id.ToString()</td>
-                <td>@item.price.ToString()</td>
+                <td><img src=@srcString style="width: 100px" /></td>
+                <td>@item.Key.id</td>
+                <td>@item.Value</td>
+                <td>@itemsPrice.ToString()</td>
             </tr>
         }
-        </table>
+
+    </table>
+    <div style="display: flex; margin-top: 15px">
+        <div style="width:100%"></div>
+        <p style="margin-right: 10px; width: 200px">Summary value: @fullPrice</p>
+        <button style="background-color: #04AA6D; color: white; border-radius: 10px" onclick="send()">Make order</button>
     </div>
+
+    <script>
+        function send() {
+            $.ajax({
+                url: '/Cart/Index',
+                type: 'POST',
+                data: { "send": true },
+                success: function () {
+ 
+                }
+            });
+        }
+    </script>
+</div>

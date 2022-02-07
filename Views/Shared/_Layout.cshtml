@@ -10,7 +10,7 @@
 </head>
 <body>
     <div class="header">
-        <a href="#default" class="logo">x-klon</a>
+        <a href="/Shop/Logged" class="logo">x-klon</a>
         <div class="header-right">
             <a class="active" href="#home">Home</a>
             @if (!String.IsNullOrEmpty(ViewBag.login)) {
@@ -20,7 +20,7 @@
                 <a onclick="document.getElementById('id01').style.display='block'" style="width:auto;">Login</a>
             }
 
-            <a href="#about">Checkout</a>
+            <a id="checkout" href="/Cart/Index">Checkout</a>
         </div>
     </div>
 
@@ -47,8 +47,9 @@
         </footer>
     </div>
 
-    <script src="~/Scripts/jquery-3.4.1.min.js"></script>
-    <script src="~/Scripts/bootstrap.min.js"></script>
+  
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.25.0/axios.min.js"></script>
     <script>
         // Get the modal
         var modal = document.getElementById('id01');

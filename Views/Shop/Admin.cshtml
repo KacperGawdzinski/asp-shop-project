@@ -1,7 +1,44 @@
-﻿
+﻿@model IEnumerable<project.Models.Processor>
 @{
     ViewBag.Title = "Admin";
 }
 
-<h2>Admin</h2>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet" />
+
+
+<label>Add new procesor</label>
+<div style="display: flex; align-items: center; gap: 45px; padding-bottom: 50px">
+    <input type="text" id="fname" name="firstname" placeholder="Processor name..">
+    <input type="text" id="lname" name="lastname" placeholder="Processor price..">
+    <input type="file" multiple class="choose">
+    <input type="submit" value="Submit">
+</div>
+
+<div style="display:flex">
+    @foreach (var item in Model) {
+        string srcString = "/Content/Images/" + @item.hash;
+        string priceString = @item.price.ToString() + "zł";
+        <div class="card">
+            <button style="background-color: red" onclick="del(@item.id)">Delete</button>
+            <img src=@srcString style="width:100%" />
+            <h1>@item.name</h1>
+            <p class="price">@priceString</p>
+        </div>
+    }
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript">
+        function del(id) {
+            $.ajax({
+                url: '/Shop/Admin',
+                type: 'POST',
+                data: { "id": id },
+                success: function () {
+                    window.location.reload();
+                }
+            });
+        }
+    </script>
+</div>
 

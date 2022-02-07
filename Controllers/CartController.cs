@@ -12,25 +12,41 @@ namespace project.Controllers
         // GET: Cart
         public ActionResult Index()
         {
-            var tab = Session["Cart"] as List<Models.Order>;
-            return View(tab);
+            var tab = Session["Cart"] as Dictionary<int,int>;
+            if(tab == null) {
+                tab = new Dictionary<int, int>();
+            }
+            using (var context = new DatabaseDataContext()) {
+                var cart = new Cart() { cart = new Dictionary<Models.Processor, int>() };
+                foreach (var v in tab) {
+                    cart.cart.Add((from pr in context.Processor where pr.id == v.Key select pr).Select(x => new Models.Processor {
+                        id = x.id,
+                        name = x.name,
+                        hash = x.hash,
+                        price = (double)x.price
+                    }).Single(),v.Value);
+                }
+                return View(cart);
+            }
         }
-        public ActionResult Index(Models.Order o)
+        [HttpPost]
+        public ActionResult Index(bool b)
         {
-            var tab = Session["Cart"] as List<Models.Order>;
+            var tab = Session["Cart"] as Dictionary<int, int>;
+
             using (var context = new DatabaseDataContext())
             {
                 string products = "";
-                foreach (var item in o.products)
-                {
-                    products = products + item + ",";
-                }
                 string quantities = "";
-                foreach (var item in o.quantities)
+                double sum = 0;
+                foreach (var item in tab)
                 {
-                    quantities = quantities + item.ToString() + ",";
+                    products = products + item.Key + ",";
+                    quantities = quantities + item.Value + ",";
+                    sum += (double)(from v in context.Processor where v.id == item.Key select v).Single().price;
                 }
-                context.Order.Append(new Order() { id = o.id, price = o.price, products = products, quantity = quantities, user_id = 0 /*TODO id zalogowanego */ });
+
+                context.Order.Append(new Order() { price = sum, products = products, quantity = quantities, user_id = 0 /*TODO id zalogowanego */ });
                 context.SubmitChanges();
             }
             return View(tab);

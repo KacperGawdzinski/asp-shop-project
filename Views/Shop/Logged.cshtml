@@ -9,11 +9,31 @@
     @foreach (var item in Model) {
         string srcString = "/Content/Images/" + @item.hash;
         string priceString = @item.price.ToString() + "zł";
-        <div class="card">
-            <img src=@srcString style="width:100%" />
-            <h1>@item.name</h1>
-            <p class="price">@priceString</p>
-            <button>Add to cart</button>
-        </div>
+    <div class="card">
+        <img src=@srcString style="width:100%" />
+        <h1>@item.name</h1>
+        <p class="price">@priceString</p>
+        <button onclick="add(@item.id)">Add to cart</button>
+    </div>
     }
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript">
+        function add(id) {
+            $.ajax({
+                url: '/Shop/Logged',
+                type: 'POST',
+                data: { "id": id },
+                success: function () {
+                    x = $("#checkout").html()
+                    splitted = x.split(" ")
+                    if (splitted.length > 1) {
+                        $("#checkout").html("Checkout: " + (parseInt(splitted[1]) + 1).toString())
+                    } else {
+                        $("#checkout").html("Checkout: 1")
+                    }
+                }
+            });
+        }
+    </script>
 </div>

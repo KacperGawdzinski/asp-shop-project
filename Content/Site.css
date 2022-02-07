@@ -125,6 +125,7 @@ input[type=text], input[type=password] {
 
 .container {
     padding: 16px;
+    min-width: 80%;
 }
 
 span.psw {
@@ -241,4 +242,21 @@ span.psw {
     text-align: left;
     background-color: #04AA6D;
     color: white;
+}
+
+.order-btn {
+    background-color: green;
+    color: white;
+}
+
+.choose::-webkit-file-upload-button {
+    color: white;
+    background: #1CB6E0;
+    border: none;
+    padding: 7px 15px;
+    font-weight: 700;
+    border-radius: 3px;
+    white-space: nowrap;
+    cursor: pointer;
+    font-size: 10pt;
 }
