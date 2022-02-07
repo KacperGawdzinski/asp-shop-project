@@ -1,7 +1,19 @@
-﻿
+﻿@model IEnumerable<project.Models.Processor>
 @{
     ViewBag.Title = "Logged";
 }
 
 <h2>Logged</h2>
 
+<div style="display:flex">
+    @foreach (var item in Model) {
+        string srcString = "/Content/Images/" + @item.hash;
+        string priceString = @item.price.ToString() + "zł";
+        <div class="card">
+            <img src=@srcString style="width:100%" />
+            <h1>@item.name</h1>
+            <p class="price">@priceString</p>
+            <button>Add to cart</button>
+        </div>
+    }
+</div>

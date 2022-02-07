@@ -21,7 +21,15 @@ namespace project.Controllers {
             
         }
         public ActionResult Logged() {
-            return View();
+            using (var context = new DatabaseDataContext()) {
+                project.Models.Processor[] procs = context.Processor.Select(x => new Models.Processor {
+                    id = x.id,
+                    name = x.name,
+                    hash = x.hash,
+                    price = (double)x.price
+                }).ToArray();
+                return View(procs);
+            }
         }
         public ActionResult Admin() {
             return View();
