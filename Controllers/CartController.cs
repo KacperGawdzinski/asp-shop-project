@@ -12,14 +12,27 @@ namespace project.Controllers
         // GET: Cart
         public ActionResult Index()
         {
-            var tab = new Models.Order[] {
-                new Models.Order() { id=0, price=69.99f, products=new string[]{ "i5 5700", "i5 6900" }, quantities=new int[]{ 1, 2 }, user_id=0 },
-                new Models.Order() { id=0, price=69.99f, products=new string[]{ "i5 5700", "i5 6900" }, quantities=new int[]{ 1, 2 }, user_id=0 },
-                new Models.Order() { id=0, price=69.99f, products=new string[]{ "i5 5700", "i5 6900" }, quantities=new int[]{ 1, 2 }, user_id=0 },
-                new Models.Order() { id=0, price=69.99f, products=new string[]{ "i5 5700", "i5 6900" }, quantities=new int[]{ 1, 2 }, user_id=0 },
-                new Models.Order() { id=0, price=69.99f, products=new string[]{ "i5 5700", "i5 6900" }, quantities=new int[]{ 1, 2 }, user_id=0 },
-            };
-
+            var tab = Session["Cart"] as List<Models.Order>;
+            return View(tab);
+        }
+        public ActionResult Index(Models.Order o)
+        {
+            var tab = Session["Cart"] as List<Models.Order>;
+            using (var context = new DatabaseDataContext())
+            {
+                string products = "";
+                foreach (var item in o.products)
+                {
+                    products = products + item + ",";
+                }
+                string quantities = "";
+                foreach (var item in o.quantities)
+                {
+                    quantities = quantities + item.ToString() + ",";
+                }
+                context.Order.Append(new Order() { id = o.id, price = o.price, products = products, quantity = quantities, user_id = 0 /*TODO id zalogowanego */ });
+                context.SubmitChanges();
+            }
             return View(tab);
         }
     }

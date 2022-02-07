@@ -32,7 +32,78 @@ namespace project.Controllers {
             }
         }
         public ActionResult Admin() {
-            return View();
+            using (var context = new DatabaseDataContext())
+            {
+                project.Models.Processor[] procs = context.Processor.Select(x => new Models.Processor
+                {
+                    id = x.id,
+                    name = x.name,
+                    hash = x.hash,
+                    price = (double)x.price
+                }).ToArray();
+                return View(procs);
+            }   
+        }
+        [HttpPost]
+        public ActionResult Logged(Models.Processor p)
+        {
+            if (Session["Cart"] == null)
+            {
+                Session["Cart"] = new List<Models.Order>();
+            }
+            Models.Order order = new Models.Order() { price = (float)p.price, products = new string[] { p.name }, quantities = new int[] { 1 }, user_id = 0 /* TODO id zalogowanego*/ };
+            ((List<Models.Order>)Session["Cart"]).Add(order);
+            using (var context = new DatabaseDataContext())
+            {
+                Models.Processor[] procs = context.Processor.Select(x => new Models.Processor
+                {
+                    id = x.id,
+                    name = x.name,
+                    hash = x.hash,
+                    price = (double)x.price
+                }).ToArray();
+                return View(procs);
+            }
+        }
+        [HttpDelete]
+        public ActionResult Admin(Models.Processor o)
+        {
+            using (var context = new DatabaseDataContext())
+            {
+                context.Processor.DeleteOnSubmit(new Processor() { id = o.id, name = o.name, hash = o.hash, price=o.price});
+                context.SubmitChanges();
+            }
+            using (var context = new DatabaseDataContext())
+            {
+                Models.Processor[] procs = context.Processor.Select(x => new Models.Processor
+                {
+                    id = x.id,
+                    name = x.name,
+                    hash = x.hash,
+                    price = (double)x.price
+                }).ToArray();
+                return View(procs);
+            }
+        }
+        [HttpPost]
+        public ActionResult Admin(Models.Processor o, int n) // TODO dodawanie elementu funkcja
+        {
+            using (var context = new DatabaseDataContext())
+            {
+                context.Processor.Append(new Processor() { id = o.id, name = o.name, hash = o.hash, price = o.price });
+                context.SubmitChanges();
+            }
+            using (var context = new DatabaseDataContext())
+            {
+                Models.Processor[] procs = context.Processor.Select(x => new Models.Processor
+                {
+                    id = x.id,
+                    name = x.name,
+                    hash = x.hash,
+                    price = (double)x.price
+                }).ToArray();
+                return View(procs);
+            }
         }
     }
 }
