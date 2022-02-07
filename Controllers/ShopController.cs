@@ -9,7 +9,6 @@ namespace project.Controllers {
     public class ShopController : Controller {
         // GET: Shop
         public ActionResult Public() {
-            //ViewBag.Login = "chuj";
             using (var context = new DatabaseDataContext()) {
                project.Models.Processor[] procs = context.Processor.Select(x => new Models.Processor {
                     id = x.id,
