@@ -17,7 +17,7 @@
                 <a style="width:auto;">@ViewBag.login</a>
             }
             else {
-                <a onclick="document.getElementById('id01').style.display='block'" style="width:auto;">Login</a>
+                <a onclick="document.getElementById('id01').style.display='block'" style="width:auto;" id="lgn_button">Login</a>
             }
 
             <a id="checkout" href="/Cart/Index">Checkout</a>
@@ -26,39 +26,48 @@
 
     <div class="container body-content">
         <div id="id01" class="modal">
-
-            <form class="modal-content animate" action="/action_page.php" method="post">
+            <div class="modal-content animate">
                 <div class="container">
-                    <input class="login-input" type="text" placeholder="Enter Username" name="uname" required>
-                    <input class="login-input" type="password" placeholder="Enter Password" name="psw" required>
+                    <input class="login-input" type="text" placeholder="Enter Username" id="uname" required>
+                    <input class="login-input" type="password" placeholder="Enter Password" id="psw" required>
                 </div>
 
                 <div class="container" style="background-color:#f1f1f1; display: flex">
                     <div style="width: 100%; color: red"></div>
-                    <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button>
-                    <button type="submit" class="cancelbtn">Login</button>
+                    <button type="button" onclick="document.getElementById('id01').style.display = 'none'" class="cancelbtn">Cancel</button>
+                    <button type="submit" class="cancelbtn" onclick="s()">Login</button>
                 </div>
-            </form>
+            </div>
         </div>
         @RenderBody()
         <hr />
-        <footer>
-            <p>ASP final project</p>
-        </footer>
     </div>
 
-  
+
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.25.0/axios.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
-        // Get the modal
         var modal = document.getElementById('id01');
 
-        // When the user clicks anywhere outside of the modal, close it
         window.onclick = function (event) {
             if (event.target == modal) {
                 modal.style.display = "none";
             }
+        }
+
+        function s() {
+            document.getElementById('id01').style.display = 'none'
+            name = $("#uname").val()
+            passwd = $("#psw").val()
+            $.ajax({
+                url: '/Login/Index',
+                type: 'POST',
+                data: { "name": name, "passwd": passwd },
+                success: function () {
+                    $("#lgn_button").html(name) //wydaje mi sie ze zadziala ale nie mam jak przetestowac to sprawdz jeszcze czy sie zmieni
+                }
+            });
         }
     </script>
 </body>

@@ -30,10 +30,11 @@ namespace project.Controllers
             }
         }
         [HttpPost]
-        public ActionResult Index(bool b)
+        public ActionResult Index(bool send)
         {
             var tab = Session["Cart"] as Dictionary<int, int>;
-
+            if (tab == null)
+                return View(new Dictionary<int, int>());
             using (var context = new DatabaseDataContext())
             {
                 string products = "";
@@ -45,11 +46,13 @@ namespace project.Controllers
                     quantities = quantities + item.Value + ",";
                     sum += (double)(from v in context.Processor where v.id == item.Key select v).Single().price;
                 }
-
-                context.Order.Append(new Order() { price = sum, products = products, quantity = quantities, user_id = 0 /*TODO id zalogowanego */ });
+                products = products.Remove(products.Length - 1);
+                quantities = quantities.Remove(quantities.Length - 1);
+                context.Order.InsertOnSubmit(new Order() {id = context.Order.OrderByDescending(x => x.id).First().id + 1, price = sum, products = products, quantity = quantities, user_id = 0 /*TODO id zalogowanego */ });
                 context.SubmitChanges();
             }
-            return View(tab);
+            Session["Cart"] = null;
+            return new HttpStatusCodeResult(System.Net.HttpStatusCode.OK);
         }
     }
 }

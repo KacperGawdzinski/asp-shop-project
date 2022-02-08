@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -46,6 +47,36 @@ namespace project.Controllers
                     return View(procs);
                 }
             }
+        }
+        [HttpGet]
+        public ActionResult AddProcessor(int? a) {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult AddProcessor(object fileData) {
+            HttpPostedFileBase file = null;
+            if (Request.Files.Count > 0) {
+                try {
+                    HttpFileCollectionBase files = Request.Files;
+                    for(int i = 0; i < files.Count; i++) {
+                        file = files[i];
+                        string fname;
+                        fname = file.FileName;
+                        fname = Path.Combine(Server.MapPath("~\\Content\\Images"), fname);
+                        file.SaveAs(fname);
+                    }
+                }
+                catch {
+
+                }
+                var name = Request.Params["name"];
+                var price = Request.Params["price"];
+                using (var context = new DatabaseDataContext()) {
+                    context.Processor.InsertOnSubmit(new Processor() {id = context.Processor.OrderByDescending(x => x.id).First().id + 1, hash = file.FileName , name=name,price = Convert.ToDouble(price)});
+                    context.SubmitChanges();
+                }
+            }
+            return View();
         }
     }
 }

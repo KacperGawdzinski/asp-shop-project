@@ -6,15 +6,8 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet" />
 
-
-<label>Add new procesor</label>
-<div style="display: flex; align-items: center; gap: 45px; padding-bottom: 50px">
-    <input type="text" id="fname" name="firstname" placeholder="Processor name..">
-    <input type="text" id="lname" name="lastname" placeholder="Processor price..">
-    <input type="file" multiple class="choose">
-    <input type="submit" value="Submit">
-</div>
-
+<button style="background-color: #04AA6D; color: white; border-radius: 10px" onclick="window.location.href='/List/Orders'">Orders</button>
+<button style="background-color: #04AA6D; color: white; border-radius: 10px"onclick="window.location.href='/List/Users'">Users</button>
 <div style="display:flex">
     @foreach (var item in Model) {
         string srcString = "/Content/Images/" + @item.hash;

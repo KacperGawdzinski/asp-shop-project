@@ -1,0 +1,27 @@
+﻿@model IEnumerable<project.Models.Order>
+@{
+    ViewBag.Title = "Users";
+}
+
+<div>
+    <table id="customers">
+        <tr>
+            <th>ID</th>
+            <th>Products</th>
+            <th>User</th>
+            <th>Price</th>
+        </tr>
+        @foreach (var item in Model) {
+            <tr>
+                <td>@item.id.ToString()</td>
+                    <td>
+                        @for (int i = 0; i < item.products.Length; i++) {
+                            <p>@item.products[i]: @item.quantities[i].ToString()</p>
+                        }
+                    </td>
+                    <td>@item.user_id.ToString()</td>
+                <td>@item.price.ToString()</td>
+            </tr>
+        }
+    </table>
+</div>

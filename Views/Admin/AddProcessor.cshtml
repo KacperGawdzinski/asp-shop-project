@@ -1,0 +1,45 @@
+﻿@model IEnumerable<project.Models.Processor>
+@{
+    ViewBag.Title = "AddProcessor";
+}
+
+<label>Add new procesor</label>
+<div style="display: flex; align-items: center; gap: 45px; padding-bottom: 50px">
+    <input type="text" id="fname" placeholder="Processor name..">
+    <input type="text" id="lname" placeholder="Processor price..">
+    <input id="upload_btn" type="file" multiple class="choose">
+    <button type="submit" value="Submit" onclick="upload()">Upload</button>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript">
+    function upload() {
+        var fileUpload = $("#upload_btn").get(0);
+        var name = $("#fname").val();
+        var price = $("#lname").val();
+
+        if (!name || !price || !fileUpload) {
+            alert("Fill every field!")
+        }
+        var files = fileUpload.files;
+        var fileData = new FormData();
+        for (var i = 0; i < files.length; i++) {
+            fileData.append(files[i].name, files[i]);
+        }
+
+        fileData.append('name', name);
+        fileData.append('price', price);
+
+        $.ajax({
+            url: '/Admin/AddProcessor',
+            type: 'POST',
+            contentType: false,
+            processData: false,
+            data: fileData,
+            success: function () {
+                window.location.reload();
+            }
+        });
+    }
+</script>
+
+

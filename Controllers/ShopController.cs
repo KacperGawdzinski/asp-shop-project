@@ -68,34 +68,10 @@ namespace project.Controllers {
                 return Logged();
             }
         }
-
-        /*
-                [HttpPost]
-                [ActionName("Delete")]
-                public ActionResult Admin(int id) {
-                    using (var context = new DatabaseDataContext())
-            {
-                context.Processor.Append(new Processor() { id = o.id, name = o.name, hash = o.hash, price = o.price });
-                context.SubmitChanges();
-            }
-            using (var context = new DatabaseDataContext())
-            {
-                Models.Processor[] procs = context.Processor.Select(x => new Models.Processor
-                {
-                    id = x.id,
-                    name = x.name,
-                    hash = x.hash,
-                    price = (double)x.price
-                }).ToArray();
-                return View(procs);
-            }
-                    
-           */
-
+ 
         [HttpPost]
-        public ActionResult Admin(int id) // TODO dodawanie elementu funkcja
+        public ActionResult Admin(int id)
         {
-            
             using (var context = new DatabaseDataContext())
             {
                 Processor p = (from a in context.Processor where a.id == id select a).Single();

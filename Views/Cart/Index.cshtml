@@ -31,7 +31,7 @@
         <p style="margin-right: 10px; width: 200px">Summary value: @fullPrice</p>
         <button style="background-color: #04AA6D; color: white; border-radius: 10px" onclick="send()">Make order</button>
     </div>
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
         function send() {
             $.ajax({
@@ -39,7 +39,7 @@
                 type: 'POST',
                 data: { "send": true },
                 success: function () {
- 
+                    window.location.reload()
                 }
             });
         }
