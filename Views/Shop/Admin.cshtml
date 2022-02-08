@@ -5,10 +5,11 @@
 
 <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet" />
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <button style="background-color: #04AA6D; color: white; border-radius: 10px" onclick="window.location.href='/List/Orders'">Orders</button>
 <button style="background-color: #04AA6D; color: white; border-radius: 10px"onclick="window.location.href='/List/Users'">Users</button>
-<div style="display:flex">
+<button style="background-color: #04AA6D; color: white; border-radius: 10px" onclick="window.location.href='/Admin/AddProcessor'">Add procesor</button>
+<div style="display: flex; flex-wrap:wrap">
     @foreach (var item in Model) {
         string srcString = "/Content/Images/" + @item.hash;
         string priceString = @item.price.ToString() + "zł";
@@ -20,7 +21,6 @@
         </div>
     }
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script type="text/javascript">
         function del(id) {
             $.ajax({
@@ -28,7 +28,9 @@
                 type: 'POST',
                 data: { "id": id },
                 success: function () {
+                    alert("Processor deleted")
                     window.location.reload();
+
                 }
             });
         }

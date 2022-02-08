@@ -9,6 +9,8 @@ namespace project.Controllers {
     public class ShopController : Controller {
         // GET: Shop
         public ActionResult Public() {
+            if(HttpContext.User.IsInRole("admin"))
+                return Redirect("/Shop/Admin");
             if (HttpContext.User.Identity.IsAuthenticated)
                 return Redirect("/Shop/Logged");
             using (var context = new DatabaseDataContext()) {

@@ -24,5 +24,11 @@ namespace project.Controllers
             Response.AppendCookie(cookie);
             return new HttpStatusCodeResult(System.Net.HttpStatusCode.OK);
         }
-    }
+        [HttpPost]
+        public ActionResult Logout(bool val)
+        {
+            FormsAuthentication.SignOut();
+            return new HttpStatusCodeResult(System.Net.HttpStatusCode.OK);
+        }
+        }
 }

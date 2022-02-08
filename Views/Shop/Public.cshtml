@@ -4,8 +4,8 @@
 }
 
 <h2>Public</h2>
-
-<div style="display:flex">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<div style="display:flex;flex-wrap:wrap">
     @foreach (var item in Model) {
         string srcString = "/Content/Images/" + @item.hash;
         string priceString = @item.price.ToString() + "zł";

@@ -13,14 +13,18 @@
         <a href="/Shop/Logged" class="logo">x-klon</a>
         <div class="header-right">
             <a class="active" href="#home">Home</a>
-            @if (!String.IsNullOrEmpty(ViewBag.login)) {
-                <a style="width:auto;">@ViewBag.login</a>
+            @{string s = Context.User.Identity.Name;}
+            @if (!String.IsNullOrEmpty(s))
+            {
+                <a style="width:auto;">@s</a>
             }
-            else {
+            else
+            {
                 <a onclick="document.getElementById('id01').style.display='block'" style="width:auto;" id="lgn_button">Login</a>
             }
 
             <a id="checkout" href="/Cart/Index">Checkout</a>
+            <button class="cancelbtn" onclick="logout()">Logout</button>
         </div>
     </div>
 
@@ -55,7 +59,16 @@
                 modal.style.display = "none";
             }
         }
-
+        function logout() {
+            $.ajax({
+                url: '/Login/Logout',
+                type: 'POST',
+                data: { "val" : true},
+                success: function () {
+                    window.location.reload()
+                }
+            });
+        }
         function s() {
             document.getElementById('id01').style.display = 'none'
             name = $("#uname").val()
@@ -65,8 +78,7 @@
                 type: 'POST',
                 data: { "name": name, "passwd": passwd },
                 success: function () {
-                    window.location.href = "/Shop/Logged"
-                    $("#lgn_button").html(name) //wydaje mi sie ze zadziala ale nie mam jak przetestowac to sprawdz jeszcze czy sie zmieni
+                    window.location.href = "/Shop/Public"
                 }
             });
         }
