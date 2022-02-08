@@ -9,6 +9,8 @@ namespace project.Controllers {
     public class ShopController : Controller {
         // GET: Shop
         public ActionResult Public() {
+            if (HttpContext.User.Identity.IsAuthenticated)
+                return Redirect("/Shop/Logged");
             using (var context = new DatabaseDataContext()) {
                project.Models.Processor[] procs = context.Processor.Select(x => new Models.Processor {
                     id = x.id,
@@ -20,6 +22,7 @@ namespace project.Controllers {
             }
             
         }
+        [Authorize]
         public ActionResult Logged() {
             using (var context = new DatabaseDataContext()) {
                 project.Models.Processor[] procs = context.Processor.Select(x => new Models.Processor {
@@ -32,6 +35,7 @@ namespace project.Controllers {
             }
         }
         [HttpGet]
+        [Authorize(Roles = "admin")]
         public ActionResult Admin() {
             using (var context = new DatabaseDataContext())
             {
@@ -46,6 +50,7 @@ namespace project.Controllers {
             }   
         }
         [HttpPost]
+        [Authorize]
         public ActionResult Logged(int id)
         {
             if (Session["Cart"] == null)
@@ -70,6 +75,7 @@ namespace project.Controllers {
         }
  
         [HttpPost]
+        [Authorize(Roles = "admin")]
         public ActionResult Admin(int id)
         {
             using (var context = new DatabaseDataContext())

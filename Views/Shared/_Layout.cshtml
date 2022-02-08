@@ -65,6 +65,7 @@
                 type: 'POST',
                 data: { "name": name, "passwd": passwd },
                 success: function () {
+                    window.location.href = "/Shop/Logged"
                     $("#lgn_button").html(name) //wydaje mi sie ze zadziala ale nie mam jak przetestowac to sprawdz jeszcze czy sie zmieni
                 }
             });

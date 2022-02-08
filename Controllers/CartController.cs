@@ -10,6 +10,7 @@ namespace project.Controllers
     public class CartController : Controller
     {
         // GET: Cart
+        [Authorize]
         public ActionResult Index()
         {
             var tab = Session["Cart"] as Dictionary<int,int>;
@@ -30,6 +31,7 @@ namespace project.Controllers
             }
         }
         [HttpPost]
+        [Authorize]
         public ActionResult Index(bool send)
         {
             var tab = Session["Cart"] as Dictionary<int, int>;
