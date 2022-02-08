@@ -20,6 +20,7 @@ namespace project.Controllers {
             }
             
         }
+        [Authorize]
         public ActionResult Logged() {
             using (var context = new DatabaseDataContext()) {
                 project.Models.Processor[] procs = context.Processor.Select(x => new Models.Processor {
@@ -31,6 +32,7 @@ namespace project.Controllers {
                 return View(procs);
             }
         }
+        [Authorize(Roles = "admin")]
         public ActionResult Admin() {
             using (var context = new DatabaseDataContext())
             {
@@ -45,6 +47,7 @@ namespace project.Controllers {
             }   
         }
         [HttpPost]
+        [Authorize]
         public ActionResult Logged(Models.Processor p)
         {
             if (Session["Cart"] == null)
@@ -66,6 +69,7 @@ namespace project.Controllers {
             }
         }
         [HttpDelete]
+        [Authorize(Roles = "admin")]
         public ActionResult Admin(Models.Processor o)
         {
             using (var context = new DatabaseDataContext())
@@ -86,6 +90,7 @@ namespace project.Controllers {
             }
         }
         [HttpPost]
+        [Authorize(Roles = "admin")]
         public ActionResult Admin(Models.Processor o, int n) // TODO dodawanie elementu funkcja
         {
             using (var context = new DatabaseDataContext())
